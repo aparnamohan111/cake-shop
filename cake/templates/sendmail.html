@@ -1,0 +1,16 @@
+{% load static %}
+<body>
+<h1>Email Sending</h1>
+{% if messages %}
+{% for message in messages %}
+<p style="color:brown;">{{message}}</p>
+{% endfor %}
+{% endif %}
+<form action="choco_mail"method="POST">
+ {% csrf_token %}
+ {{form}}
+ <br>
+ <br>
+ <input type="submit"value="send">
+</form>
+</body>
