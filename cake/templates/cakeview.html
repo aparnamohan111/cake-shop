@@ -67,7 +67,12 @@
                             <h5 class="card-title">{{ i.cname }}</h5>
                             <p class="card-text fw-bold">Rs.{{ i.cprice }}</p>
                             <a href="/addtocart?idn={{i.id}}" class="btn btn-primary">ADD TO CART</a>
-                            <a href="/addtocart?idn={{i.id}}" class="btn btn-primary">Send Details</a>
+                            <form action="{% url 'send_cake_email' i.id %}" method="POST">
+                              {% csrf_token %}
+                              <label for="recipient_email">Enter Email:</label>
+                              <input type="email" name="recipient_email" required>
+                             <button type="submit" class="btn btn-outline-secondary">Send Cake Details</button>
+                          </form>
                         </div>
                     </div>
                 </div>

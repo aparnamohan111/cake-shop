@@ -9,7 +9,7 @@ urlpatterns = [
     path('addtocart',views.addtocart,name='addtocart'),
     path('cartdel',views.cartdel,name='cartdel'),
     path('home',views.home,name="home"),
-    path('choco_mail',views.choco_mail)
+    path("send-cake-email/<int:cake_id>/",views.send_cake_email, name="send_cake_email")
     
 
    

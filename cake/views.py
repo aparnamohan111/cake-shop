@@ -96,16 +96,31 @@ def home(request):
    return render (request,'home.html')
 
 
-def choco_mail(request):
- form=ChocoForm()
- if request.method=='POST':
-   form= ChocoForm (request.POST)
-   if form.is_valid():
-     subject= form.cleaned_data.get('sub')
-     message= form.cleaned_data.get('cont')
-     recipient=form.cleaned_data.get('to')
- 
- send_mail(subject,message,settings.EMAIL_HOST_USER,[recipient],fail_silently=False)
- messages.success(request,'Successfully message send!.. ')
- return redirect('/choco_mail')
- return render(request,"sendmail.html",{'form':form})
+from django.core.mail import send_mail
+from django.conf import settings
+from django.shortcuts import render, redirect, get_object_or_404
+  
+
+def send_cake_email(request, cake_id):
+    if request.method == "POST":
+        recipient_email = request.POST.get("recipient_email")
+        cake = get_object_or_404(cake_tbl, id=cake_id)
+
+        subject = f"Check out this Cake: {cake.cname}"
+        
+        # Embed the image URL in the email
+        message = f"""
+        <html>
+            <body>
+                <h2>Hey! Check out this amazing cake:</h2>
+                <p><strong>🍰 Name:</strong> {cake.cname}</p>
+                <p><strong>💰 Price:</strong> ${cake.cprice}</p>
+                <img src="{{cake.cimg.url}}" alt="Cake Image" width="300" style="border-radius:10px;">
+            </body>
+        </html>
+        """
+
+        email_from = settings.EMAIL_HOST_USER
+        send_mail(subject, "", email_from, [recipient_email], html_message=message)
+
+        return redirect("cakeview")
